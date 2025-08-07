@@ -22,6 +22,17 @@ if [ -d *"homeproxy"* ]; then
 	cd $PKG_PATH && echo "homeproxy date has been updated!"
 fi
 
+#修改argon主题设置
+ARGON_FILE="$GITHUB_WORKSPACE/openwrt/feeds/luci/applications/luci-app-argon-config/root/etc/config/argon"
+DIY_FILE="$GITHUB_WORKSPACE/files/etc/config/argon"
+if [ -f "$ARGON_FILE" ]; then
+	echo " "
+
+        cp -f "$DIY_FILE" "$ARGON_FILE"
+
+	cd $PKG_PATH && echo "theme-argon has been fixed!"
+fi
+
 #移除Shadowsocks组件
 PW_FILE=$(find ./ -maxdepth 3 -type f -wholename "*/luci-app-passwall/Makefile")
 if [ -f "$PW_FILE" ]; then
@@ -48,3 +59,85 @@ if [ -f "$TS_FILE" ]; then
 
 	cd $PKG_PATH && echo "tailscale has been fixed!"
 fi
+
+#修复DiskMan编译失败
+DM_FILE="./luci-app-diskman/applications/luci-app-diskman/Makefile"
+if [ -f "$DM_FILE" ]; then
+	echo " "
+
+	sed -i 's/fs-ntfs/fs-ntfs3/g' $DM_FILE
+        sed -i '/ntfs-3g-utils /d' $DM_FILE
+
+	cd $PKG_PATH && echo "diskman has been fixed!"
+fi
+
+# 自定义v2ray-geodata下载
+V2RAY_FILE="../feeds/packages/net/v2ray-geodata"
+MF_FILE="$GITHUB_WORKSPACE/package/v2ray-geodata/Makefile"
+SH_FILE="$GITHUB_WORKSPACE/package/v2ray-geodata/init.sh"
+UP_FILE="$GITHUB_WORKSPACE/package/v2ray-geodata/v2ray-geodata-updater"
+if [ -d "$V2RAY_FILE" ]; then
+	echo " "
+
+	cp -f "$MF_FILE" "$V2RAY_FILE/Makefile"
+	cp -f "$SH_FILE" "$V2RAY_FILE/init.sh"
+	cp -f "$UP_FILE" "$V2RAY_FILE/v2ray-geodata-updater"
+
+	cd $PKG_PATH && echo "v2ray-geodata has been fixed!"
+fi
+
+#设置nginx默认配置和修复quickstart温度显示
+wget "https://gist.githubusercontent.com/huanchenshang/df9dc4e13c6b2cd74e05227051dca0a9/raw/nginx.default.config" -O ../feeds/packages/net/nginx-util/files/nginx.config
+wget "https://gist.githubusercontent.com/puteulanus/1c180fae6bccd25e57eb6d30b7aa28aa/raw/istore_backend.lua" -O ../package/luci-app-quickstart/luasrc/controller/istore_backend.lua
+
+# 移除 uhttpd 依赖
+# 当启用luci-app-quickfile插件时，表示启动nginx，所以移除luci对uhttp(luci-light)的依赖
+remove_uhttpd_dependency() {
+    local config_path="$GITHUB_WORKSPACE/openwrt/.config"
+    local luci_makefile_path="$GITHUB_WORKSPACE/openwrt/feeds/luci/collections/luci/Makefile"
+
+    if grep -q "CONFIG_PACKAGE_luci-app-quickfile=y" "$config_path"; then
+        if [ -f "$luci_makefile_path" ]; then
+            sed -i '/luci-light/d' "$luci_makefile_path"
+            echo "Removed uhttpd (luci-light) dependency as luci-app-quickfile (nginx) is enabled."
+        fi
+    fi
+}
+
+#修改CPU 性能优化调节名称显示
+update_cpufreq_config() {
+    local path="$GITHUB_WORKSPACE/openwrt/feeds/luci/applications/luci-app-cpufreq"
+    local po_file="$path/po/zh_Hans/cpufreq.po"
+
+    if [ -d "$path" ] && [ -f "$po_file" ]; then
+        sed -i 's/msgstr "CPU 性能优化调节"/msgstr "性能调节"/g' "$po_file"
+        echo "Modification completed for $po_file"
+    else
+        echo "Error: Directory or PO file not found at $path"
+        return 1
+    fi
+}
+
+#添加quickfile文件管理
+add_quickfile() {
+    local repo_url="https://github.com/sbwml/luci-app-quickfile.git"
+    local target_dir="$GITHUB_WORKSPACE/openwrt/package/emortal/quickfile"
+    if [ -d "$target_dir" ]; then
+        rm -rf "$target_dir"
+    fi
+    git clone --depth 1 "$repo_url" "$target_dir"
+
+    local makefile_path="$target_dir/quickfile/Makefile"
+    if [ -f "$makefile_path" ]; then
+        sed -i '/\t\$(INSTALL_BIN) \$(PKG_BUILD_DIR)\/quickfile-\$(ARCH_PACKAGES)/c\
+\tif [ "\$(ARCH_PACKAGES)" = "x86_64" ]; then \\\
+\t\t\$(INSTALL_BIN) \$(PKG_BUILD_DIR)\/quickfile-x86_64 \$(1)\/usr\/bin\/quickfile; \\\
+\telse \\\
+\t\t\$(INSTALL_BIN) \$(PKG_BUILD_DIR)\/quickfile-aarch64_generic \$(1)\/usr\/bin\/quickfile; \\\
+\tfi' "$makefile_path"
+    fi
+}
+
+remove_uhttpd_dependency
+update_cpufreq_config
+add_quickfile
