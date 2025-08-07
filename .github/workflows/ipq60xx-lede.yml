@@ -29,4 +29,4 @@ jobs:
       #软件源
       FEEDS_CONF: feeds.conf.default
       #配置文件
-      CONFIG_FILE: ./config/lede/znm2-lede-passwall.config
+      CONFIG_FILE: ./config/lede/jdcloud-re-ss-01.config
