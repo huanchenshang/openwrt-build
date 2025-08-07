@@ -39,7 +39,20 @@ UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"
 
 # UPDATE_PACKAGE "luci-app-ddns-go" "sirpdboy/luci-app-ddns-go" "main"
 # UPDATE_PACKAGE "luci-app-msd_lite" "ximiTech/luci-app-msd_lite" "main"
+UPDATE_PACKAGE "diskman" "lisaac/luci-app-diskman" "master"
+#quickstart
+UPDATE_PACKAGE "taskd" "kenzok8/small-package" "main" "pkg"
+UPDATE_PACKAGE "luci-lib-xterm" "kenzok8/small-package" "main" "pkg"
+UPDATE_PACKAGE "luci-lib-taskd" "kenzok8/small-package" "main" "pkg"
+UPDATE_PACKAGE "luci-app-store" "kenzok8/small-package" "main" "pkg"
+UPDATE_PACKAGE "quickstart" "kenzok8/small-package" "main" "pkg"
+UPDATE_PACKAGE "luci-app-quickstart" "kenzok8/small-package" "main" "pkg"
+UPDATE_PACKAGE "luci-app-istorex" "kenzok8/small-package" "main" "pkg"
 
+#unishare
+UPDATE_PACKAGE "webdav2" "kenzok8/small-package" "main" "pkg"
+UPDATE_PACKAGE "unishare" "kenzok8/small-package" "main" "pkg"
+UPDATE_PACKAGE "luci-app-unishare" "kenzok8/small-package" "main" "pkg"
 
 
 
