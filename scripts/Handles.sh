@@ -135,7 +135,7 @@ change_cpufreq_config() {
 
 #修改Argon 主题设置名称显示
 change_argon_config() {
-    local path="./feeds/small-package/luci-app-argon-config"
+    local path="./luci-app-argon-config"
     local po_file="$path/po/zh_Hans/argon-config.po"
 
     if [ -d "$path" ] && [ -f "$po_file" ]; then
