@@ -120,16 +120,14 @@ jobs:
       - name: Custom Settings
         run: |
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-          make defconfig
-          . $GITHUB_WORKSPACE/scripts/function.sh
           cd ./openwrt
-
           $GITHUB_WORKSPACE/scripts/Settings.sh
 
       - name: Download package
         id: package
         run: |
           cd openwrt
+          make defconfig
           make download -j8
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
