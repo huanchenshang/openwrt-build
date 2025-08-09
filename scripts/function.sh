@@ -19,7 +19,6 @@ CONFIG_DEBUG_INFO=y
 CONFIG_DEBUG_INFO_BTF=y
 CONFIG_KPROBE_EVENTS=y
 CONFIG_BPF_EVENTS=y
-
 EOF
     echo "cat_kernel_config to $1 done"
   fi
@@ -34,11 +33,7 @@ function set_kernel_size() {
   sed -i "/^define Device\/redmi_ax5-jdcloud/,/^endef/ { /KERNEL_SIZE := 6144k/s//KERNEL_SIZE := 12288k/ }" $image_file
 }
 
-
-function generate_config() {
-  config_file=".config"
-
-  set_kernel_size
-  #增加内核选项
-  cat_kernel_config "target/linux/qualcommax/${target}/config-default"
-}
+#调整内核大小
+set_kernel_size
+#增加内核选项
+cat_kernel_config "target/linux/qualcommax/${target}/config-default"
