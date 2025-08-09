@@ -20,32 +20,9 @@ CONFIG_DEBUG_INFO_BTF=y
 CONFIG_KPROBE_EVENTS=y
 CONFIG_BPF_EVENTS=y
 
-CONFIG_SCHED_CLASS_EXT=y
-CONFIG_PROBE_EVENTS_BTF_ARGS=y
-CONFIG_IMX_SCMI_MISC_DRV=y
-CONFIG_ARM64_CONTPTE=y
-CONFIG_TRANSPARENT_HUGEPAGE=y
-CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS=y
-# CONFIG_TRANSPARENT_HUGEPAGE_MADVISE is not set
-# CONFIG_TRANSPARENT_HUGEPAGE_NEVER is not set
 EOF
     echo "cat_kernel_config to $1 done"
   fi
-}
-
-function cat_ebpf_config() {
-  cat >> $1 <<EOF
-CONFIG_DEVEL=y
-CONFIG_KERNEL_DEBUG_INFO=y
-CONFIG_KERNEL_DEBUG_INFO_REDUCED=n
-CONFIG_KERNEL_DEBUG_INFO_BTF=y
-CONFIG_KERNEL_CGROUPS=y
-CONFIG_KERNEL_CGROUP_BPF=y
-CONFIG_KERNEL_BPF_EVENTS=y
-CONFIG_BPF_TOOLCHAIN_HOST=y
-CONFIG_KERNEL_XDP_SOCKETS=y
-CONFIG_PACKAGE_kmod-xdp-sockets-diag=y
-EOF
 }
 
 function set_kernel_size() {
@@ -60,19 +37,8 @@ function set_kernel_size() {
 
 function generate_config() {
   config_file=".config"
-  #如配置文件已存在
-  cat $GITHUB_WORKSPACE/Config/${WRT_CONFIG}.txt $GITHUB_WORKSPACE/Config/GENERAL.txt  > $config_file
-  local target=$(echo $WRT_ARCH | cut -d'_' -f2)
 
-  #增加ebpf
-  cat_ebpf_config $config_file
   set_kernel_size
   #增加内核选项
   cat_kernel_config "target/linux/qualcommax/${target}/config-default"
 }
-
-
-
-
-
-
