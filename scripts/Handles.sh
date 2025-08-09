@@ -66,7 +66,7 @@ if [ -f "$DM_FILE" ]; then
 	echo " "
 
 	sed -i 's/fs-ntfs/fs-ntfs3/g' $DM_FILE
-        sed -i '/ntfs-3g-utils /d' $DM_FILE
+    sed -i '/ntfs-3g-utils /d' $DM_FILE
 
 	cd $PKG_PATH && echo "diskman has been fixed!"
 fi
@@ -90,6 +90,21 @@ fi
 wget "https://gist.githubusercontent.com/huanchenshang/df9dc4e13c6b2cd74e05227051dca0a9/raw/nginx.default.config" -O ../feeds/packages/net/nginx-util/files/nginx.config
 wget "https://gist.githubusercontent.com/puteulanus/1c180fae6bccd25e57eb6d30b7aa28aa/raw/istore_backend.lua" -O ../package/luci-app-quickstart/luasrc/controller/istore_backend.lua
 
+# 修改软件源为immortalwrt
+change_opkg_distfeeds() {
+    local lean_def_dir="$GITHUB_WORKSPACE/openwrt/package/lean/default-settings"
+    local zzz_default_settings="$lean_def_dir/files/zzz-default-settings"
+
+    # 检查是否存在 lean_def_dir 和 zzz_default_settings
+    if [ -d "$lean_def_dir" ] && [ -f "$zzz_default_settings" ]; then
+
+        # 删除指定行
+        sed -i "/sed -i '\/openwrt_luci\/ { s\/snapshots\/releases\\\\\/18.06.9\/g; }' \/etc\/opkg\/distfeeds.conf/d" "$zzz_default_settings"
+        # 替换指定行
+        sed -i "s#sed -i 's#downloads.openwrt.org#mirrors.tencent.com/lede#g' /etc/opkg/distfeeds.conf#sed -i 's#downloads.openwrt.org#downloads.immortalwrt.org#g' /etc/opkg/distfeeds.conf#" "$zzz_default_settings"
+    fi
+}
+
 # 移除 uhttpd 依赖
 # 当启用luci-app-quickfile插件时，表示启动nginx，所以移除luci对uhttp(luci-light)的依赖
 remove_uhttpd_dependency() {
@@ -105,12 +120,26 @@ remove_uhttpd_dependency() {
 }
 
 #修改CPU 性能优化调节名称显示
-update_cpufreq_config() {
+change_cpufreq_config() {
     local path="$GITHUB_WORKSPACE/openwrt/feeds/luci/applications/luci-app-cpufreq"
     local po_file="$path/po/zh_Hans/cpufreq.po"
 
     if [ -d "$path" ] && [ -f "$po_file" ]; then
         sed -i 's/msgstr "CPU 性能优化调节"/msgstr "性能调节"/g' "$po_file"
+        echo "Modification completed for $po_file"
+    else
+        echo "Error: Directory or PO file not found at $path"
+        return 1
+    fi
+}
+
+#修改Argon 主题设置名称显示
+change_argon_config() {
+    local path="./luci-app-argon-config"
+    local po_file="$path/po/zh_Hans/argon-config.po"
+
+    if [ -d "$path" ] && [ -f "$po_file" ]; then
+        sed -i 's/msgstr "Argon 主题设置"/msgstr "主题设置"/g' "$po_file"
         echo "Modification completed for $po_file"
     else
         echo "Error: Directory or PO file not found at $path"
@@ -138,6 +167,25 @@ add_quickfile() {
     fi
 }
 
+#修改argon背景图片
+change_argon_background() {
+    local theme_path="$GITHUB_WORKSPACE/openwrt/feeds/luci/themes/luci-theme-argon/htdocs/luci-static/argon/background"
+    local source_path="$GITHUB_WORKSPACE/images"
+    local source_file="$source_path/bg1.jpg"
+    local target_file="$theme_path/bg1.jpg"
+
+    if [ -f "$source_file" ]; then
+        cp -f "$source_file" "$target_file"
+        echo "背景图片更新成功：$target_file"
+    else
+        echo "错误：未找到源图片文件：$source_file"
+        return 1
+    fi
+}
+
+change_opkg_distfeeds
 remove_uhttpd_dependency
-update_cpufreq_config
+change_cpufreq_config
+change_argon_config
+change_argon_background
 add_quickfile
