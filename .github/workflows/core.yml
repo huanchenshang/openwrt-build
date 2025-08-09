@@ -120,7 +120,7 @@ jobs:
       - name: Custom Settings
         run: |
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-          . $GITHUB_WORKSPACE/Scripts/function.sh
+          . $GITHUB_WORKSPACE/scripts/function.sh
           cd ./openwrt
           generate_config && cat .config  
 
