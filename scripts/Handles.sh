@@ -22,17 +22,6 @@ if [ -d *"homeproxy"* ]; then
 	cd $PKG_PATH && echo "homeproxy date has been updated!"
 fi
 
-#修改argon主题设置
-#ARGON_FILE="$GITHUB_WORKSPACE/openwrt/feeds/luci/applications/luci-app-argon-config/root/etc/config/argon"
-#DIY_FILE="$GITHUB_WORKSPACE/files/etc/config/argon"
-#if [ -f "$ARGON_FILE" ]; then
-	#echo " "
-
-     #   cp -f "$DIY_FILE" "$ARGON_FILE"
-
-	#cd $PKG_PATH && echo "theme-argon has been fixed!"
-#fi
-
 #移除Shadowsocks组件
 PW_FILE=$(find ./ -maxdepth 3 -type f -wholename "*/luci-app-passwall/Makefile")
 if [ -f "$PW_FILE" ]; then
