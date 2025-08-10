@@ -6,8 +6,6 @@ on:
   # 手动执行
   workflow_dispatch:
   # 默认为utc时间，北京时间需要减去8
-  schedule:
-    - cron: 0 13 1/7 * *
 
 #CI权限
 permissions: write-all
@@ -16,7 +14,6 @@ permissions: write-all
 jobs:
   build:
     name: ipq60xx-libWrt
-
 
     #调用公用编译核心WRT-CORE.yml
     uses: ./.github/workflows/core.yml
