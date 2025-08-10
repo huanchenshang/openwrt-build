@@ -176,5 +176,5 @@ change_opkg_distfeeds
 remove_uhttpd_dependency
 change_cpufreq_config
 #change_argon_config
-#change_argon_background
+change_argon_background
 add_quickfile
