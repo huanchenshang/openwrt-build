@@ -23,15 +23,15 @@ if [ -d *"homeproxy"* ]; then
 fi
 
 #修改argon主题设置
-ARGON_FILE="$GITHUB_WORKSPACE/openwrt/feeds/luci/applications/luci-app-argon-config/root/etc/config/argon"
-DIY_FILE="$GITHUB_WORKSPACE/files/etc/config/argon"
-if [ -f "$ARGON_FILE" ]; then
-	echo " "
+#ARGON_FILE="$GITHUB_WORKSPACE/openwrt/feeds/luci/applications/luci-app-argon-config/root/etc/config/argon"
+#DIY_FILE="$GITHUB_WORKSPACE/files/etc/config/argon"
+#if [ -f "$ARGON_FILE" ]; then
+	#echo " "
 
-        cp -f "$DIY_FILE" "$ARGON_FILE"
+     #   cp -f "$DIY_FILE" "$ARGON_FILE"
 
-	cd $PKG_PATH && echo "theme-argon has been fixed!"
-fi
+	#cd $PKG_PATH && echo "theme-argon has been fixed!"
+#fi
 
 #移除Shadowsocks组件
 PW_FILE=$(find ./ -maxdepth 3 -type f -wholename "*/luci-app-passwall/Makefile")
@@ -186,6 +186,6 @@ change_argon_background() {
 change_opkg_distfeeds
 remove_uhttpd_dependency
 change_cpufreq_config
-change_argon_config
-change_argon_background
+#change_argon_config
+#change_argon_background
 add_quickfile
