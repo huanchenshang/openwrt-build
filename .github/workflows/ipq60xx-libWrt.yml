@@ -14,17 +14,8 @@ permissions: write-all
 
 #CI任务
 jobs:
-  config:
-    name: ${{matrix.TARGET}}
-    strategy:
-      fail-fast: false
-      #max-parallel: 3
-      matrix:
-        include:
-          - TARGET: ipq60xx-libWrt-nowifi
-            CONFIG_FILE: nowifi.config
-          - TARGET: ipq60xx-libWrt-wifi
-            CONFIG_FILE: wifi.config
+  build:
+    name: ipq60xx-libWrt
 
 
     #调用公用编译核心WRT-CORE.yml
@@ -41,5 +32,5 @@ jobs:
       #软件源
       FEEDS_CONF: feeds.conf.default
       #配置文件
-      CONFIG_FILE: ./config/libWrt/${{matrix.CONFIG_FILE}}     
+      CONFIG_FILE: ./config/jdcloud-re-ss-01-libwrt.config  
 
