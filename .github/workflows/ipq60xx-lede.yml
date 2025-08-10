@@ -29,4 +29,4 @@ jobs:
       #软件源
       FEEDS_CONF: feeds.conf.default
       #配置文件
-      CONFIG_FILE: ./config/lede/jdcloud_ax1800pro.config
+      CONFIG_FILE: ./config/jdcloud-re-ss-01.config
