@@ -2,6 +2,17 @@
 
 PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 
+#修改访问ip
+LAN_ADDR="192.168.10.1"
+CFG_PATH="$PKG_PATH/base-files/files/bin/config_generate"
+if [ -f $CFG_PATH ]; then
+    echo " "
+	
+    sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH
+
+    cd $PKG_PATH && echo "lan ip has been updated!"
+fi
+
 #预置HomeProxy数据
 if [ -d *"homeproxy"* ]; then
 	HP_RULE="surge"
@@ -44,6 +55,8 @@ fi
 #修复TailScale配置文件冲突
 TS_FILE=$(find ../feeds/packages/ -maxdepth 3 -type f -wholename "*/tailscale/Makefile")
 if [ -f "$TS_FILE" ]; then
+    echo " "
+	
 	sed -i '/\/files/d' $TS_FILE
 
 	cd $PKG_PATH && echo "tailscale has been fixed!"
