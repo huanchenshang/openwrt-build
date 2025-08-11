@@ -4,11 +4,14 @@ PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 
 #修改访问ip
 LAN_ADDR="192.168.10.1"
+HOST_NAME="iStoreOS"
 CFG_PATH="$PKG_PATH/base-files/files/bin/config_generate"
-if [ -f $CFG_PATH ]; then
+CFG2_PATH="$PKG_PATH/base-files/luci2/bin/config_generate"
+if [ -f $CFG_PATH ] && [ -f $CFG2_PATH ]; then
     echo " "
 	
-    sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH
+    sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH $CFG2_PATH
+ 	sed -i 's/LEDE/iStoreOS/g' $CFG_PATH $CFG2_PATH
 
     cd $PKG_PATH && echo "lan ip has been updated!"
 fi
