@@ -48,6 +48,23 @@ EOF
   fi
 }
 
+cat_ebpf_config() {
+config_file="$GITHUB_WORKSPACE/openwrt/.config"
+  if [ -f "$config_file" ]; then
+    cat >> $config_file <<EOF
+CONFIG_DEVEL=y
+CONFIG_KERNEL_DEBUG_INFO=y
+CONFIG_KERNEL_DEBUG_INFO_REDUCED=n
+CONFIG_KERNEL_DEBUG_INFO_BTF=y
+CONFIG_KERNEL_CGROUPS=y
+CONFIG_KERNEL_CGROUP_BPF=y
+CONFIG_KERNEL_BPF_EVENTS=y
+CONFIG_BPF_TOOLCHAIN_HOST=y
+CONFIG_KERNEL_XDP_SOCKETS=y
+CONFIG_PACKAGE_kmod-xdp-sockets-diag=y
+EOF
+}
+
 # 修改内核大小
 set_kernel_size() {
   image_file="$GITHUB_WORKSPACE/openwrt/target/linux/qualcommax/image/ipq60xx.mk"
@@ -62,6 +79,6 @@ set_kernel_size() {
     echo "Image file $image_file not found, skipping kernel size update"
   fi
 }
-
+cat_ebpf_config
 cat_kernel_config
 set_kernel_size
