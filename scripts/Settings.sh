@@ -63,6 +63,9 @@ CONFIG_BPF_TOOLCHAIN_HOST=y
 CONFIG_KERNEL_XDP_SOCKETS=y
 CONFIG_PACKAGE_kmod-xdp-sockets-diag=y
 EOF
+
+    echo "cat_ebpf_config to  $config_file done"
+  fi
 }
 
 # 修改内核大小
