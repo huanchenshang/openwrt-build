@@ -1,4 +1,5 @@
 #!/bin/bash
+PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 
 #修改默认主题
 sed -i "s/luci-theme-bootstrap/luci-theme-argon/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")
