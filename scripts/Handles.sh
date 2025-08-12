@@ -64,6 +64,32 @@ if [ -f "$LED_FILE" ]; then
 	cd $PKG_PATH && echo "状态灯修复完成!"
 fi
 
+#修复5G不支持160
+WIRELESS_FILE="../feeds/lluci/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js"
+
+# 检查文件是否存在
+if [ -f "$WIRELESS_FILE" ]; then
+    echo "正在修复 wireless.js 文件..."
+
+    # 删除 'VHT160', '160 MHz', htmodelist.VHT160
+    sed -i "/'VHT160', '160 MHz', htmodelist.VHT160/d" $WIRELESS_FILE
+
+    # 删除 'HE160', '160 MHz', htmodelist.HE160
+    sed -i "/'HE160', '160 MHz', htmodelist.HE160/d" $WIRELESS_FILE
+
+    # 删除 if (/HE20|HE40|HE80|HE160/.test(htval)) 中的 |HE160
+    # 注意：这里需要更精确的匹配，以避免删除其他地方的 HE160
+    sed -i "s/|HE160\(\/.test(htval))\)/\1/g" $WIRELESS_FILE
+
+    # 删除 else if (/VHT20|VHT40|VHT80|VHT160/.test(htval)) 中的 |VHT160
+    # 注意：这里需要更精确的匹配，以避免删除其他地方的 VHT160
+    sed -i "s/|VHT160\(\/.test(htval))\)//g" $WIRELESS_FILE
+
+    cd $PKG_PATH && echo "wireless.js 文件修复完成！"
+else
+    echo "错误：文件 wireless.js 未找到。"
+fi
+
 # 自定义v2ray-geodata下载
 V2RAY_FILE="../feeds/packages/net/v2ray-geodata"
 MF_FILE="$GITHUB_WORKSPACE/package/v2ray-geodata/Makefile"
@@ -105,6 +131,7 @@ src/gz openwrt_routing https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT
 src/gz openwrt_telephony https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/telephony/
 EOF
 NEW_END
+	cd $PKG_PATH && echo "替换软件源完成！"
 fi
 
 # 移除 uhttpd 依赖
@@ -115,7 +142,7 @@ luci_makefile_path="$GITHUB_WORKSPACE/openwrt/feeds/luci/collections/luci/Makefi
 if grep -q "CONFIG_PACKAGE_luci-app-quickfile=y" "$config_path"; then
     if [ -f "$luci_makefile_path" ]; then
         sed -i '/luci-light/d' "$luci_makefile_path"
-        echo "Removed uhttpd (luci-light) dependency as luci-app-quickfile (nginx) is enabled."
+        cd $PKG_PATH && echo "Removed uhttpd (luci-light) dependency as luci-app-quickfile (nginx) is enabled."
     fi
 fi
 
@@ -125,7 +152,7 @@ po_file="$path/po/zh_Hans/cpufreq.po"
 
 if [ -d "$path" ] && [ -f "$po_file" ]; then
     sed -i 's/msgstr "CPU 性能优化调节"/msgstr "性能调节"/g' "$po_file"
-    echo "Modification completed for $po_file"
+    cd $PKG_PATH && echo "Modification completed for $po_file"
 else
     echo "Error: Directory or PO file not found at $path"
     return 1
@@ -147,6 +174,7 @@ if [ -f "$makefile_path" ]; then
 \telse \\\
 \t\t\$(INSTALL_BIN) \$(PKG_BUILD_DIR)\/quickfile-aarch64_generic \$(1)\/usr\/bin\/quickfile; \\\
 \tfi' "$makefile_path"
+	cd $PKG_PATH && "添加quickfile成功"
 fi
 
 #修改argon背景图片
@@ -157,7 +185,7 @@ target_file="$theme_path/bg1.jpg"
 
 if [ -f "$source_file" ]; then
     cp -f "$source_file" "$target_file"
-    echo "背景图片更新成功：$target_file"
+    cd $PKG_PATH echo "背景图片更新成功：$target_file"
 else
     echo "错误：未找到源图片文件：$source_file"
     return 1
@@ -168,7 +196,7 @@ quickfile_path="$GITHUB_WORKSPACE/openwrt/package/emortal/quickfile/luci-app-qui
 
 if [ -d "$(dirname "$quickfile_path")" ] && [ -f "$quickfile_path" ]; then
     sed -i 's/system/nas/g' "$quickfile_path"
-    echo "quickfile位置更改完成"
+    cd $PKG_PATH echo "quickfile位置更改完成"
 else
     echo "quickfile文件或目录不存在，跳过更改。"
 	return 1
@@ -181,7 +209,7 @@ po_file="$tb_path/po/zh_Hans/turboacc.po"
 
 if [ -d "$tb_path" ] && [ -f "$po_file" ]; then
     sed -i 's/msgstr "Turbo ACC 网络加速"/msgstr "网络加速"/g' "$po_file"
-    echo "turboacc名称更改完成"
+    cd $PKG_PATH echo "turboacc名称更改完成"
 else
     echo "turboacc文件或目录不存在，跳过更改"
     return 1
