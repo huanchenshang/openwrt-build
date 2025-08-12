@@ -5,7 +5,7 @@ PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 #预置HomeProxy数据
 if [ -d *"homeproxy"* ]; then
 	HP_RULE="surge"
-	HP_PATH="homeproxy/root/etc/homeproxy"
+	HP_PATH="./feeds/luci/applications/luci-app-homeproxy/root/etc/homeproxy"
 
 	rm -rf ./$HP_PATH/resources/*
 
