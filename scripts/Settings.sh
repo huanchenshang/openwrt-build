@@ -82,6 +82,6 @@ set_kernel_size() {
     echo "Image file $image_file not found, skipping kernel size update"
   fi
 }
-cat_ebpf_config
-cat_kernel_config
-set_kernel_size
+#cat_ebpf_config
+#cat_kernel_config
+#set_kernel_size
