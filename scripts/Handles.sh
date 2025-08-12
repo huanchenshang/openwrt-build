@@ -116,9 +116,9 @@ zzz_default_settings="$lean_def_dir/files/zzz-default-settings"
 # 检查是否存在 lean_def_dir 和 zzz_default_settings
 if [ -d "$lean_def_dir" ] && [ -f "$zzz_default_settings" ]; then
 
-    # 删除指定行
-    sed -i "/sed -i '\/openwrt_luci\/ { s\/snapshots\/releases\\\\\/18.06.9\/g; }' \/etc\/opkg\/distfeeds.conf/d" "$zzz_default_settings"
-    sed -i "/sed -i 's#downloads.openwrt.org#mirrors.tencent.com/lede#g' /etc/opkg/distfeeds.conf/d" "$zzz_default_settings"
+    # 使用更简单的模式删除包含特定内容的行
+    sed -i '/openwrt_luci/d' "$zzz_default_settings"
+    sed -i '/mirrors.tencent.com/d' "$zzz_default_settings"
 
     # 使用 cat 命令将新的软件源配置追加到文件末尾
     cat << 'NEW_END' >> "$zzz_default_settings"
@@ -131,7 +131,7 @@ src/gz openwrt_routing https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT
 src/gz openwrt_telephony https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/telephony/
 EOF
 NEW_END
-	cd $PKG_PATH && echo "替换软件源完成！"
+    cd $PKG_PATH && echo "替换软件源完成！"
 fi
 
 # 移除 uhttpd 依赖
