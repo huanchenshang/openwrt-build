@@ -174,7 +174,7 @@ if [ -f "$makefile_path" ]; then
 \telse \\\
 \t\t\$(INSTALL_BIN) \$(PKG_BUILD_DIR)\/quickfile-aarch64_generic \$(1)\/usr\/bin\/quickfile; \\\
 \tfi' "$makefile_path"
-	cd $PKG_PATH && "添加quickfile成功"
+	cd $PKG_PATH && echo "添加quickfile成功"
 fi
 
 #修改argon背景图片
@@ -185,10 +185,9 @@ target_file="$theme_path/bg1.jpg"
 
 if [ -f "$source_file" ]; then
     cp -f "$source_file" "$target_file"
-    cd $PKG_PATH echo "背景图片更新成功：$target_file"
+    cd $PKG_PATH && echo "背景图片更新成功"
 else
-    echo "错误：未找到源图片文件：$source_file"
-    return 1
+    echo "错误：未找到源图片文件"
 fi
 
 #修改quickfile菜单位置
@@ -196,12 +195,10 @@ quickfile_path="$GITHUB_WORKSPACE/openwrt/package/emortal/quickfile/luci-app-qui
 
 if [ -d "$(dirname "$quickfile_path")" ] && [ -f "$quickfile_path" ]; then
     sed -i 's/system/nas/g' "$quickfile_path"
-    cd $PKG_PATH echo "quickfile位置更改完成"
+    cd $PKG_PATH && echo "quickfile位置更改完成"
 else
     echo "quickfile文件或目录不存在，跳过更改。"
-	return 1
 fi
-
 
 #turboacc设置名称显示
 tb_path="$GITHUB_WORKSPACE/openwrt/feeds/luci/applications/luci-app-turboacc"
@@ -209,9 +206,8 @@ po_file="$tb_path/po/zh_Hans/turboacc.po"
 
 if [ -d "$tb_path" ] && [ -f "$po_file" ]; then
     sed -i 's/msgstr "Turbo ACC 网络加速"/msgstr "网络加速"/g' "$po_file"
-    cd $PKG_PATH echo "turboacc名称更改完成"
+    cd $PKG_PATH && echo "turboacc名称更改完成"
 else
     echo "turboacc文件或目录不存在，跳过更改"
-    return 1
 fi
 
