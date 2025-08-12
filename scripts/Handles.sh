@@ -134,18 +134,6 @@ NEW_END
     cd $PKG_PATH && echo "替换软件源完成！"
 fi
 
-# 移除 uhttpd 依赖
-# 当启用luci-app-quickfile插件时，表示启动nginx，所以移除luci对uhttp(luci-light)的依赖
-config_path="$GITHUB_WORKSPACE/openwrt/config/jdcloud-re-ss-01.config"
-luci_makefile_path="$GITHUB_WORKSPACE/openwrt/feeds/luci/collections/luci/Makefile"
-
-if grep -q "CONFIG_PACKAGE_luci-app-quickfile=y" "$config_path"; then
-    if [ -f "$luci_makefile_path" ]; then
-        sed -i '/luci-light/d' "$luci_makefile_path"
-        cd $PKG_PATH && echo "删除 uhttpd (luci-light) 依赖项,因为 luci-app-quickfile (nginx) 已启用."
-    fi
-fi
-
 #修改CPU 性能优化调节名称显示
 path="$GITHUB_WORKSPACE/openwrt/feeds/luci/applications/luci-app-cpufreq"
 po_file="$path/po/zh_Hans/cpufreq.po"
@@ -191,7 +179,7 @@ else
 fi
 
 #修改quickfile菜单位置
-quickfile_path="$GITHUB_WORKSPACE/openwrt/package/emortal/quickfile/luci-app-quickfile/root/usr/share/luci/menu.d/luci-app-quickfile.json"
+quickfile_path="$GITHUB_WORKSPACE/openwrt/package/lean/quickfile/luci-app-quickfile/root/usr/share/luci/menu.d/luci-app-quickfile.json"
 
 if [ -d "$(dirname "$quickfile_path")" ] && [ -f "$quickfile_path" ]; then
     sed -i 's/system/nas/g' "$quickfile_path"
