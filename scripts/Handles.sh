@@ -65,7 +65,7 @@ if [ -f "$LED_FILE" ]; then
 fi
 
 #修复5G不支持160
-WIRELESS_FILE="../feeds/lluci/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js"
+WIRELESS_FILE="../feeds/luci/modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js"
 
 # 检查文件是否存在
 if [ -f "$WIRELESS_FILE" ]; then
