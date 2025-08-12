@@ -125,6 +125,8 @@ jobs:
           # 清理旧的编译文件，以避免冲突
           cd ../../../
           make clean
+          # 添加这行来设置TERM环境变量，防止menuconfig错误
+          export TERM=xterm-256color
 
       - name: Custom Settings
         run: |
