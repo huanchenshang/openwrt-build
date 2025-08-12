@@ -13,9 +13,11 @@ if [ -f $CFG_PATH ] && [ -f $CFG2_PATH ]; then
 	
     sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH $CFG2_PATH
  	sed -i 's/LEDE/'$HOST_NAME'/g' $CFG_PATH $CFG2_PATH
-
+	#修改immortalwrt.lan关联IP
+	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$LAN_ADDR/g" $(find ./feeds/luci/modules/luci-mod-system/ -type f -name "flash.js")
     cd $PKG_PATH && echo "访问ip修改完成!"
 fi
+
 
 # 修改wifi参数
 WRT_SSID_2G="iStoreOS-2.4G"
