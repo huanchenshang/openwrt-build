@@ -53,6 +53,17 @@ if [ -f "$DM_FILE" ]; then
 	cd $PKG_PATH && echo "diskman has been fixed!"
 fi
 
+#修复状态灯
+LED_FILE="../target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6000-re-ss-01.dts"
+if [ -f "$LED_FILE" ]; then
+	echo " "
+ 
+	sed -i 's/led-boot = &led_status_green;/led-boot = &led_status_blue;/g' $LED_FILE
+ 	sed -i 's/led-running = &led_status_blue;/led-running = &led_status_green;/g' $LED_FILE
+
+	cd $PKG_PATH && echo "状态灯修复完成!"
+fi
+
 # 自定义v2ray-geodata下载
 V2RAY_FILE="../feeds/packages/net/v2ray-geodata"
 MF_FILE="$GITHUB_WORKSPACE/package/v2ray-geodata/Makefile"
