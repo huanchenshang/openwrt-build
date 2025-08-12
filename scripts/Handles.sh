@@ -19,7 +19,7 @@ if [ -d *"homeproxy"* ]; then
 
 	cd .. && rm -rf ./$HP_RULE/
 
-	cd $PKG_PATH && echo "homeproxy date has been updated!"
+	cd $PKG_PATH && echo "homeproxy数据已更新!"
 fi
 
 #修复TailScale配置文件冲突
@@ -29,7 +29,7 @@ if [ -f "$TS_FILE" ]; then
 	
 	sed -i '/\/files/d' $TS_FILE
 
-	cd $PKG_PATH && echo "tailscale has been fixed!"
+	cd $PKG_PATH && echo "tailscale修复成功!"
 fi
 
 #修复Rust编译失败
@@ -39,7 +39,7 @@ if [ -f "$RUST_FILE" ]; then
 
 	sed -i 's/ci-llvm=true/ci-llvm=false/g' $RUST_FILE
 
-	cd $PKG_PATH && echo "rust has been fixed!"
+	cd $PKG_PATH && echo "rust修复成功!"
 fi
 
 #修复DiskMan编译失败
@@ -50,7 +50,7 @@ if [ -f "$DM_FILE" ]; then
 	sed -i 's/fs-ntfs/fs-ntfs3/g' $DM_FILE
 	sed -i '/ntfs-3g-utils /d' $DM_FILE
 
-	cd $PKG_PATH && echo "diskman has been fixed!"
+	cd $PKG_PATH && echo "diskman修复成功!"
 fi
 
 #修复状态灯
@@ -102,7 +102,7 @@ if [ -d "$V2RAY_FILE" ]; then
 	cp -f "$SH_FILE" "$V2RAY_FILE/init.sh"
 	cp -f "$UP_FILE" "$V2RAY_FILE/v2ray-geodata-updater"
 
-	cd $PKG_PATH && echo "v2ray-geodata has been fixed!"
+	cd $PKG_PATH && echo "v2ray-geodata替换完成!"
 fi
 
 #设置nginx默认配置和修复quickstart温度显示
@@ -142,7 +142,7 @@ luci_makefile_path="$GITHUB_WORKSPACE/openwrt/feeds/luci/collections/luci/Makefi
 if grep -q "CONFIG_PACKAGE_luci-app-quickfile=y" "$config_path"; then
     if [ -f "$luci_makefile_path" ]; then
         sed -i '/luci-light/d' "$luci_makefile_path"
-        cd $PKG_PATH && echo "Removed uhttpd (luci-light) dependency as luci-app-quickfile (nginx) is enabled."
+        cd $PKG_PATH && echo "删除 uhttpd (luci-light) 依赖项,因为 luci-app-quickfile (nginx) 已启用."
     fi
 fi
 
@@ -152,9 +152,9 @@ po_file="$path/po/zh_Hans/cpufreq.po"
 
 if [ -d "$path" ] && [ -f "$po_file" ]; then
     sed -i 's/msgstr "CPU 性能优化调节"/msgstr "性能调节"/g' "$po_file"
-    cd $PKG_PATH && echo "Modification completed for $po_file"
+    cd $PKG_PATH && echo "cpu调节更名完成"
 else
-    echo "Error: Directory or PO file not found at $path"
+    echo "cpufreq.po文件未找到"
     return 1
 fi
 
