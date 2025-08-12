@@ -83,7 +83,7 @@ fi
 
 # 移除 uhttpd 依赖
 # 当启用luci-app-quickfile插件时，表示启动nginx，所以移除luci对uhttp(luci-light)的依赖
-config_path="$GITHUB_WORKSPACE/openwrt/config/.config"
+config_path="$GITHUB_WORKSPACE/openwrt/.config"
 luci_makefile_path="$GITHUB_WORKSPACE/openwrt/feeds/luci/collections/luci/Makefile"
 
 if grep -q "CONFIG_PACKAGE_luci-app-quickfile=y" "$config_path"; then
