@@ -1,5 +1,61 @@
 #!/bin/bash
 
+#修改默认主题
+sed -i "s/luci-theme-bootstrap/luci-theme-argon/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")
+
+#修改访问ip和主机名称
+LAN_ADDR="192.168.10.1"
+HOST_NAME="iStoreOS"
+CFG_PATH="$PKG_PATH/base-files/files/bin/config_generate"
+CFG2_PATH="$PKG_PATH/base-files/luci2/bin/config_generate"
+if [ -f $CFG_PATH ] && [ -f $CFG2_PATH ]; then
+    echo " "
+	
+    sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH $CFG2_PATH
+ 	sed -i 's/LEDE/'$HOST_NAME'/g' $CFG_PATH $CFG2_PATH
+
+    cd $PKG_PATH && echo "访问ip修改完成!"
+fi
+
+# 修改wifi参数
+WRT_SSID_2G="iStoreOS-2.4G"
+WRT_SSID_5G="iStoreOS-5G"
+WRT_WORD="ai.ni520"
+WIFI_UC="$PKG_PATH/kernel/mac80211/files/lib/wifi/mac80211.sh"
+
+if [ -f "$WIFI_UC" ]; then
+    echo "--- 正在修改 mac80211.sh 中的 Wi-Fi 参数 ---"
+
+    # 使用sed命令将默认的ssid设置替换为case语句，以区分2.4G和5G
+    sed -i "/set wireless.default_radio\${devidx}.ssid=LEDE/c \\
+            case \"\${mode_band}\" in\\
+            2g) set wireless.default_radio\${devidx}.ssid='$WRT_SSID_2G' ;;\
+            5g) set wireless.default_radio\${devidx}.ssid='$WRT_SSID_5G' ;;\
+            esac" "$WIFI_UC"
+
+    # 修改WIFI加密：将encryption=none替换为psk2+ccmp
+    sed -i "s/encryption=none/encryption='psk2+ccmp'/g" "$WIFI_UC"
+
+    # 修改WIFI地区：将country=US替换为CN
+    sed -i "s/country=US/country='CN'/g" "$WIFI_UC"
+
+    # 在 uci batch 中添加 mu_beamformer 和 txpower
+    # 在 'set wireless.radio${devidx}.country='CN'' 行之后插入
+    sed -i "/country='CN'/a \
+            set wireless.radio\${devidx}.mu_beamformer='1'\n\
+            set wireless.radio\${devidx}.txpower='20'" "$WIFI_UC"
+
+    # 在 uci batch 中添加 key
+    # 在 'set wireless.default_radio${devidx}.encryption='psk2+ccmp'' 行之后插入
+    sed -i "/encryption='psk2+ccmp'/a \
+            set wireless.default_radio\${devidx}.key='$WRT_WORD'" "$WIFI_UC"
+
+    echo "Wi-Fi 参数修改和添加完成！"
+else
+    echo "Error: mac80211.sh 文件未找到，路径为：$WIFI_UC"
+    exit 1
+fi
+
 #配置文件修改
 echo "CONFIG_PACKAGE_luci=y" >> ./.config
 echo "CONFIG_LUCI_LANG_zh_Hans=y" >> ./.config
