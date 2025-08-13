@@ -60,7 +60,7 @@ UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"
 # UPDATE_PACKAGE "luci-app-ddns-go" "sirpdboy/luci-app-ddns-go" "main"
 # UPDATE_PACKAGE "luci-app-msd_lite" "ximiTech/luci-app-msd_lite" "main"
 UPDATE_PACKAGE "diskman" "lisaac/luci-app-diskman" "master"
-UPDATE_PACKAGE "sing-box" "kenzok8/small-package" "main" "pkg"
+#UPDATE_PACKAGE "sing-box" "kenzok8/small-package" "main" "pkg"
 
 #quickstart
 UPDATE_PACKAGE "taskd" "kenzok8/small-package" "main" "pkg"
