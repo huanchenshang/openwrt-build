@@ -100,6 +100,16 @@ jobs:
           mixkey: ${{env.REPO_SOURCE}}-${{env.REPO_BRANCH}}-${{env.WRT_HASH}}
           prefix: ${{ env.OPENWRT_PATH }}
 
+      - name: Add Latest Golang Feed
+        run: |
+           cd openwrt
+           GOLANG_REPO="https://github.com/sbwml/packages_lang_golang"
+           GOLANG_BRANCH="25.x"
+           if [[ -d ./feeds/packages/lang/golang ]]; then
+               \rm -rf ./feeds/packages/lang/golang
+               git clone --depth 1 $GOLANG_REPO -b $GOLANG_BRANCH ./feeds/packages/lang/golang
+           fi
+      
       - name: Update Feeds
         run: |
           cd openwrt
