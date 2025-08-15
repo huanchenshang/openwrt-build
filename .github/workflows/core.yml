@@ -126,10 +126,10 @@ jobs:
           $GITHUB_WORKSPACE/scripts/Packages.sh
           $GITHUB_WORKSPACE/scripts/Handles.sh
 
-      - name: Modify kernel version
-        run: |
-          cd openwrt
-          sed -i 's/KERNEL_PATCHVER:=6.12/KERNEL_PATCHVER:=6.6/g' target/linux/qualcommax/Makefile
+      #- name: Modify kernel version
+        #run: |
+          #cd openwrt
+          #sed -i 's/KERNEL_PATCHVER:=6.12/KERNEL_PATCHVER:=6.6/g' target/linux/qualcommax/Makefile
       
       - name: Custom Settings
         run: |
