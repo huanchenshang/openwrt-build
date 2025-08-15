@@ -21,8 +21,8 @@ fi
 
 
 # 修改wifi参数
-WRT_SSID_2G="iStoreOS-2.4G"
-WRT_SSID_5G="iStoreOS-5G"
+#WRT_SSID_2G="iStoreOS-2.4G"
+WRT_SSID="iStoreOS"
 WRT_WORD="ai.ni520"
 WIFI_UC="$PKG_PATH/kernel/mac80211/files/lib/wifi/mac80211.sh"
 
@@ -30,12 +30,12 @@ if [ -f "$WIFI_UC" ]; then
     echo "--- 正在修改 mac80211.sh 中的 Wi-Fi 参数 ---"
 
     # 使用sed命令将默认的ssid设置替换为case语句，以区分2.4G和5G
-    sed -i "/set wireless.default_radio\${devidx}.ssid=LEDE/c \\
-            case \"\${mode_band}\" in\\
-            2g) set wireless.default_radio\${devidx}.ssid='$WRT_SSID_2G' ;;\
-            5g) set wireless.default_radio\${devidx}.ssid='$WRT_SSID_5G' ;;\
-            esac" "$WIFI_UC"
-
+    #sed -i "/set wireless.default_radio\${devidx}.ssid=LEDE/c \\
+            #case \"\${mode_band}\" in\\
+            #2g) set wireless.default_radio\${devidx}.ssid='$WRT_SSID_2G' ;;\
+            #5g) set wireless.default_radio\${devidx}.ssid='$WRT_SSID_5G' ;;\
+            #esac" "$WIFI_UC"
+    sed -i "s/ssid=LEDE/ssid='WRT_SSID'/g" "$WIFI_UC"
     # 修改WIFI加密：将encryption=none替换为psk2+ccmp
     sed -i "s/encryption=none/encryption='psk2+ccmp'/g" "$WIFI_UC"
 
