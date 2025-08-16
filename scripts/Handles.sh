@@ -180,16 +180,6 @@ else
     echo "错误：未找到源图片文件"
 fi
 
-#修改quickfile菜单位置
-quickfile_path="$GITHUB_WORKSPACE/openwrt/package/lean/quickfile/luci-app-quickfile/root/usr/share/luci/menu.d/luci-app-quickfile.json"
-
-if [ -d "$(dirname "$quickfile_path")" ] && [ -f "$quickfile_path" ]; then
-    sed -i 's/system/nas/g' "$quickfile_path"
-    cd $PKG_PATH && echo "quickfile位置更改完成"
-else
-    echo "quickfile文件或目录不存在，跳过更改。"
-fi
-
 #turboacc设置名称显示
 tb_path="$GITHUB_WORKSPACE/openwrt/feeds/luci/applications/luci-app-turboacc"
 po_file="$tb_path/po/zh_Hans/turboacc.po"
