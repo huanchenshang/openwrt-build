@@ -55,7 +55,7 @@ fi
 
 #修复状态灯
 LED_FILE="./target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6000-re-ss-01.dts"
-DTS_FILE="./files/ipq6018-re-ss-01.dts"
+DTS_FILE="./files/ipq6000-re-ss-01.dts"
 if [ -f "$LED_FILE" ]; then
 	echo " "
  
