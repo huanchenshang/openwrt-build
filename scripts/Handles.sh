@@ -54,14 +54,16 @@ if [ -f "$DM_FILE" ]; then
 fi
 
 #修复状态灯
-LED_FILE="../target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6000-re-ss-01.dts"
+LED_FILE="./target/linux/qualcommax/files/arch/arm64/boot/dts/qcom/ipq6000-re-ss-01.dts"
+DTS_FILE="./files/ipq6018-re-ss-01.dts"
 if [ -f "$LED_FILE" ]; then
 	echo " "
  
-	sed -i 's/led-boot = &led_status_green;/led-boot = &led_status_blue;/g' $LED_FILE
- 	sed -i 's/led-running = &led_status_blue;/led-running = &led_status_green;/g' $LED_FILE
+    cp -f "$DTS_FILE" "$LED_FILE"
 
-	cd $PKG_PATH && echo "状态灯修复完成!"
+	echo "状态灯修复完成!"
+else
+    echo "状态灯修复失败" 
 fi
 
 #修复5G不支持160
