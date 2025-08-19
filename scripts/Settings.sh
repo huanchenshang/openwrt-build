@@ -5,48 +5,48 @@ PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 sed -i "s/luci-theme-bootstrap/luci-theme-argon/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")
 
 #修改访问ip和主机名称
-LAN_ADDR="192.168.10.1"
-HOST_NAME="iStoreOS"
-CFG_PATH="$PKG_PATH/base-files/files/bin/config_generate"
-CFG2_PATH="$PKG_PATH/base-files/luci2/bin/config_generate"
-if [ -f $CFG_PATH ] && [ -f $CFG2_PATH ]; then
-    echo " "
-	
-    sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH $CFG2_PATH
- 	sed -i 's/LEDE/'$HOST_NAME'/g' $CFG_PATH $CFG2_PATH
-	#修改immortalwrt.lan关联IP
-	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$LAN_ADDR/g" $(find ./feeds/luci/modules/luci-mod-system/ -type f -name "flash.js")
-    cd $PKG_PATH && echo "访问ip修改完成!"
-fi
+#LAN_ADDR="192.168.10.1"
+#HOST_NAME="iStoreOS"
+#CFG_PATH="$PKG_PATH/base-files/files/bin/config_generate"
+#CFG2_PATH="$PKG_PATH/base-files/luci2/bin/config_generate"
+#if [ -f $CFG_PATH ] && [ -f $CFG2_PATH ]; then
+#    echo " "
+#	
+#    sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH $CFG2_PATH
+# 	sed -i 's/LEDE/'$HOST_NAME'/g' $CFG_PATH $CFG2_PATH
+#	#修改immortalwrt.lan关联IP
+#	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$LAN_ADDR/g" $(find ./feeds/luci/modules/luci-mod-system/ -type f -name "flash.js")
+#    cd $PKG_PATH && echo "访问ip修改完成!"
+#fi
 
 
 # 修改wifi参数
-WRT_SSID="iStoreOS"
-WRT_WORD="ai.ni520"
-WIFI_UC="$PKG_PATH/kernel/mac80211/files/lib/wifi/mac80211.sh"
-
-if [ -f "$WIFI_UC" ]; then
-    echo "--- 正在修改 mac80211.sh 中的 Wi-Fi 参数 ---"
-
-    # 使用双引号来确保变量被正确扩展
-    sed -i "s/ssid=LEDE/ssid='$WRT_SSID'/g" "$WIFI_UC"
-    sed -i "s/encryption=none/encryption='psk2+ccmp'/g" "$WIFI_UC"
-    sed -i "s/country=US/country='CN'/g" "$WIFI_UC"
-
-    # 为了更好的可读性，将插入操作分成两个 sed 命令
-    # 在 'set wireless.radio${devidx}.country='CN'' 行之后插入
-    sed -i "/country='CN'/a \n\
-        set wireless.radio\${devidx}.mu_beamformer='1'\n\
-        set wireless.radio\${devidx}.txpower='20'" "$WIFI_UC"
-
-    # 在 'set wireless.default_radio${devidx}.encryption='psk2+ccmp'' 行之后插入
-    sed -i "/encryption='psk2+ccmp'/a \n\
-        set wireless.default_radio\${devidx}.key='$WRT_WORD'" "$WIFI_UC"
-
-    echo "Wi-Fi 参数修改和添加完成！"
-else
-    echo "Error: mac80211.sh 文件未找到，路径为：$WIFI_UC"
-fi
+#WRT_SSID="iStoreOS"
+#WRT_WORD="ai.ni520"
+#WIFI_UC="$PKG_PATH/kernel/mac80211/files/lib/wifi/mac80211.sh"
+#
+#if [ -f "$WIFI_UC" ]; then
+#    echo "--- 正在修改 mac80211.sh 中的 Wi-Fi 参数 ---"
+#
+#    # 使用双引号来确保变量被正确扩展
+#    sed -i "s/ssid=LEDE/ssid='$WRT_SSID'/g" "$WIFI_UC"
+#    sed -i "s/encryption=none/encryption='psk2+ccmp'/g" "$WIFI_UC"
+#    sed -i "s/country=US/country='CN'/g" "$WIFI_UC"
+#
+#    # 为了更好的可读性，将插入操作分成两个 sed 命令
+#    # 在 'set wireless.radio${devidx}.country='CN'' 行之后插入
+#    sed -i "/country='CN'/a \n\
+#        set wireless.radio\${devidx}.mu_beamformer='1'\n\
+#        set wireless.radio\${devidx}.txpower='20'" "$WIFI_UC"
+#
+#    # 在 'set wireless.default_radio${devidx}.encryption='psk2+ccmp'' 行之后插入
+#    sed -i "/encryption='psk2+ccmp'/a \n\
+#        set wireless.default_radio\${devidx}.key='$WRT_WORD'" "$WIFI_UC"
+#
+#    echo "Wi-Fi 参数修改和添加完成！"
+#else
+#    echo "Error: mac80211.sh 文件未找到，路径为：$WIFI_UC"
+#fi
 
 #配置文件修改
 echo "CONFIG_PACKAGE_luci=y" >> ./.config
