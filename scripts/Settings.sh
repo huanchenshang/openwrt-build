@@ -91,6 +91,15 @@ CONFIG_DEBUG_INFO=y
 CONFIG_DEBUG_INFO_BTF=y
 CONFIG_KPROBE_EVENTS=y
 CONFIG_BPF_EVENTS=y
+
+CONFIG_SCHED_CLASS_EXT=y
+CONFIG_PROBE_EVENTS_BTF_ARGS=y
+CONFIG_IMX_SCMI_MISC_DRV=y
+CONFIG_ARM64_CONTPTE=y
+CONFIG_TRANSPARENT_HUGEPAGE=y
+CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS=y
+# CONFIG_TRANSPARENT_HUGEPAGE_MADVISE is not set
+# CONFIG_TRANSPARENT_HUGEPAGE_NEVER is not set
 EOF
     echo "cat_kernel_config to "$conde_file" done"
   fi
@@ -130,6 +139,6 @@ set_kernel_size() {
     echo "Image file $image_file not found, skipping kernel size update"
   fi
 }
-#cat_ebpf_config
-#cat_kernel_config
-#set_kernel_size
+cat_ebpf_config
+cat_kernel_config
+set_kernel_size
