@@ -40,6 +40,8 @@ env:
   FEEDS_CONF: ${{inputs.FEEDS_CONF}}
   CONFIG_FILE: ${{inputs.CONFIG_FILE}}
   TZ: Asia/Shanghai
+#CI权限
+permissions: write-all
 
 jobs:
   build:
