@@ -5,19 +5,19 @@ PKG_PATH="$GITHUB_WORKSPACE/openwrt/package/"
 sed -i "s/luci-theme-bootstrap/luci-theme-argon/g" $(find ./feeds/luci/collections/ -type f -name "Makefile")
 
 #修改访问ip和主机名称
-#LAN_ADDR="192.168.10.1"
-#HOST_NAME="iStoreOS"
-#CFG_PATH="$PKG_PATH/base-files/files/bin/config_generate"
-#CFG2_PATH="$PKG_PATH/base-files/luci2/bin/config_generate"
-#if [ -f $CFG_PATH ] && [ -f $CFG2_PATH ]; then
-#    echo " "
-#	
-#    sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH $CFG2_PATH
-# 	sed -i 's/LEDE/'$HOST_NAME'/g' $CFG_PATH $CFG2_PATH
-#	#修改immortalwrt.lan关联IP
-#	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$LAN_ADDR/g" $(find ./feeds/luci/modules/luci-mod-system/ -type f -name "flash.js")
-#    cd $PKG_PATH && echo "访问ip修改完成!"
-#fi
+LAN_ADDR="192.168.10.1"
+HOST_NAME="iStoreOS"
+CFG_PATH="$PKG_PATH/base-files/files/bin/config_generate"
+CFG2_PATH="$PKG_PATH/base-files/luci2/bin/config_generate"
+if [ -f $CFG_PATH ] && [ -f $CFG2_PATH ]; then
+    echo " "
+	
+    sed -i 's/192\.168\.[0-9]*\.[0-9]*/'$LAN_ADDR'/g' $CFG_PATH $CFG2_PATH
+ 	sed -i 's/LEDE/'$HOST_NAME'/g' $CFG_PATH $CFG2_PATH
+	#修改immortalwrt.lan关联IP
+	sed -i "s/192\.168\.[0-9]*\.[0-9]*/$LAN_ADDR/g" $(find ./feeds/luci/modules/luci-mod-system/ -type f -name "flash.js")
+    cd $PKG_PATH && echo "访问ip修改完成!"
+fi
 
 
 # 修改wifi参数
