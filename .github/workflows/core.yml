@@ -82,7 +82,7 @@ jobs:
             libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev \
             libreadline-dev libssl-dev libtool llvm lrzsz msmtp ninja-build p7zip p7zip-full patch pkgconf \
             python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion \
-            swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev       
+            swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev dos2unix       
           sudo bash -c 'bash <(curl -s https://build-scripts.immortalwrt.org/init_build_environment.sh)'
           sudo timedatectl set-timezone "$TZ"
           git config --global user.email "aa@163.com"
@@ -107,15 +107,6 @@ jobs:
           mixkey: ${{env.REPO_SOURCE}}-${{env.REPO_BRANCH}}-${{env.WRT_HASH}}
           prefix: ${{ env.OPENWRT_PATH }}
 
-      - name: Add Latest Golang Feed
-        run: |
-           cd openwrt
-           GOLANG_REPO="https://github.com/sbwml/packages_lang_golang"
-           GOLANG_BRANCH="25.x"
-           if [[ -d ./feeds/packages/lang/golang ]]; then
-               \rm -rf ./feeds/packages/lang/golang
-               git clone --depth 1 $GOLANG_REPO -b $GOLANG_BRANCH ./feeds/packages/lang/golang
-           fi
       
       - name: Check Scripts
         run: |
@@ -128,16 +119,26 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a        
 
+      - name: Add Latest Golang Feed
+        run: |
+           cd openwrt
+           GOLANG_REPO="https://github.com/sbwml/packages_lang_golang"
+           GOLANG_BRANCH="25.x"
+           if [[ -d ./feeds/packages/lang/golang ]]; then
+               \rm -rf ./feeds/packages/lang/golang
+               git clone --depth 1 $GOLANG_REPO -b $GOLANG_BRANCH ./feeds/packages/lang/golang
+           fi
+
       - name: Custom Packages
         run: |
           cd ./openwrt/package/
           $GITHUB_WORKSPACE/scripts/Packages.sh
           $GITHUB_WORKSPACE/scripts/Handles.sh
 
-      #- name: Modify kernel version
-        #run: |
-          #cd openwrt
-          #sed -i 's/KERNEL_PATCHVER:=6.12/KERNEL_PATCHVER:=6.6/g' target/linux/qualcommax/Makefile
+      - name: Modify kernel version
+        run: |
+          cd openwrt
+          sed -i 's/KERNEL_PATCHVER:=6.12/KERNEL_PATCHVER:=6.6/g' target/linux/qualcommax/Makefile
       
       - name: Custom Settings
         run: |
