@@ -42,9 +42,9 @@ UPDATE_PACKAGE() {
 
 #UPDATE_PACKAGE "包名" "项目地址" "项目分支" "pkg/name，可选，pkg为从大杂烩中单独提取包名插件；name为重命名为包名"
 #UPDATE_PACKAGE "argon" "jerrykuku/luci-theme-argon" "master"
-UPDATE_PACKAGE "luci-app-argon-config" "sbwml/luci-theme-argon" "main" "pkg"
+#UPDATE_PACKAGE "luci-app-argon-config" "sbwml/luci-theme-argon" "main" "pkg"
 #UPDATE_PACKAGE "kucat" "sirpdboy/luci-theme-kucat" "js"
-
+UPDATE_PACKAGE "momo" "nikkinikki-org/OpenWrt-momo" "main"
 UPDATE_PACKAGE "nikki" "nikkinikki-org/OpenWrt-nikki" "main"
 #UPDATE_PACKAGE "passwall-packages" "xiaorouji/openwrt-passwall-packages" "main"
 #UPDATE_PACKAGE "passwall" "xiaorouji/openwrt-passwall" "main" "pkg"
@@ -52,7 +52,7 @@ UPDATE_PACKAGE "nikki" "nikkinikki-org/OpenWrt-nikki" "main"
 
 #UPDATE_PACKAGE "mosdns" "sbwml/luci-app-mosdns" "v5"
 #UPDATE_PACKAGE "vnt" "lazyoop/networking-artifact" "main" "pkg"
-UPDATE_PACKAGE "easytier" "lazyoop/networking-artifact" "main" "pkg"
+#UPDATE_PACKAGE "easytier" "lazyoop/networking-artifact" "main" "pkg"
 
 #UPDATE_PACKAGE "luci-app-gecoosac" "lwb1978/openwrt-gecoosac" "main"
 UPDATE_PACKAGE "luci-app-tailscale" "asvow/luci-app-tailscale" "main"

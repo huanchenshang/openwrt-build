@@ -29,7 +29,7 @@ if [ -f "$DM_FILE" ]; then
  
 	sed -i 's/fs-ntfs/fs-ntfs3/g' $DM_FILE
 	sed -i '/ntfs-3g-utils /d' $DM_FILE
-
+    sed -i '/config PACKAGE_$(PKG_NAME)_INCLUDE_ntfs_3g_utils/,/default y/d' "$DM_FILE"
 	cd $PKG_PATH && echo "diskman修复成功!"
 fi
 
